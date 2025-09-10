@@ -2,6 +2,8 @@ package com.tutaller.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,10 +26,12 @@ public class Inscripcion {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "taller_id")
+    @JsonBackReference
     private Taller taller;
 
     public Inscripcion() {}

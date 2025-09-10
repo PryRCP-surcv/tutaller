@@ -2,6 +2,8 @@ package com.tutaller.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ public class Taller {
 
     private String nombre;
     private String descripcion;
-    private String duracion; // Ejemplo: "4 semanas", "2 meses"
+    private String duracion; // Ejemplo: "4 semanas"
 
     private Double precio;
 
@@ -28,6 +30,7 @@ public class Taller {
 
     // Relación con inscripción
     @OneToMany(mappedBy = "taller", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Inscripcion> inscripciones;
 
     public Taller() {}
@@ -96,8 +99,5 @@ public class Taller {
     public void setInscripciones(List<Inscripcion> inscripciones) {
         this.inscripciones = inscripciones;
     }
-
-    // Getters y setters
-
     
 }
