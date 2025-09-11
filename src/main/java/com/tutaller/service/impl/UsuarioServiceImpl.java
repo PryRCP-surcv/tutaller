@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tutaller.dto.UsuarioDTO;
 import com.tutaller.model.Usuario;
 import com.tutaller.repository.UsuarioRepository;
 import com.tutaller.service.UsuarioService;
@@ -18,7 +19,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     // Guarda un nuevo usuario (POST)
     @Override
-    public Usuario guardar(Usuario usuario) {
+    public Usuario guardar(UsuarioDTO usuarioDTO) {
+        Usuario usuario = new Usuario();
+        usuario.setNombres(usuarioDTO.getNombres());
+        usuario.setApellidos(usuarioDTO.getApellidos());
+        usuario.setCorreo(usuarioDTO.getCorreo());
+        usuario.setContrasena(usuarioDTO.getContrasena()); // Idealmente, la contraseña debería encriptarse aquí
+        usuario.setTelefono(usuarioDTO.getTelefono());
+        usuario.setRol(usuarioDTO.getRol());
         return usuarioRepository.save(usuario);
     }
 
@@ -36,19 +44,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     // Actualiza un usuario existente (PUT)
     @Override
-    public Optional<Usuario> actualizar(Long id, Usuario usuarioActualizado) {
-        Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
-        if (usuarioExistente.isPresent()) {
-            Usuario usuario = usuarioExistente.get();
-            usuario.setNombres(usuarioActualizado.getNombres());
-            usuario.setApellidos(usuarioActualizado.getApellidos());
-            usuario.setCorreo(usuarioActualizado.getCorreo());
-            usuario.setContrasena(usuarioActualizado.getContrasena());
-            usuario.setTelefono(usuarioActualizado.getTelefono());
-            usuario.setRol(usuarioActualizado.getRol());
-            return Optional.of(usuarioRepository.save(usuario));
-        }
-        return Optional.empty();
+    public Optional<Usuario> actualizar(Long id, UsuarioDTO usuarioDTO) {
+        return usuarioRepository.findById(id).map(usuarioExistente -> {
+            usuarioExistente.setNombres(usuarioDTO.getNombres());
+            usuarioExistente.setApellidos(usuarioDTO.getApellidos());
+            usuarioExistente.setCorreo(usuarioDTO.getCorreo());
+            usuarioExistente.setContrasena(usuarioDTO.getContrasena());
+            usuarioExistente.setTelefono(usuarioDTO.getTelefono());
+            usuarioExistente.setRol(usuarioDTO.getRol());
+            return usuarioRepository.save(usuarioExistente);
+        });
     }
 
     // Elimina un usuario por ID (DELETE)

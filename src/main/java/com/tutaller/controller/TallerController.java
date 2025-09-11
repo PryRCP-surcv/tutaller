@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutaller.dto.TallerDTO;
 import com.tutaller.model.Taller;
 import com.tutaller.service.TallerService;
 
@@ -39,25 +40,16 @@ public class TallerController {
 
     // POST /api/talleres
     @PostMapping
-    public ResponseEntity<Taller> registrarTaller(@RequestBody Taller taller) {
-        return ResponseEntity.ok(tallerService.registrar(taller));
+    public ResponseEntity<Taller> registrarTaller(@RequestBody TallerDTO tallerDTO) {
+        return ResponseEntity.ok(tallerService.registrar(tallerDTO));
     }
 
     // PUT /api/talleres/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<Taller> actualizarTaller(@PathVariable Long id, @RequestBody Taller tallerActualizado) {
-        Optional<Taller> tallerExistente = tallerService.buscarPorId(id);
-        if (tallerExistente.isPresent()) {
-            Taller taller = tallerExistente.get();
-            taller.setNombre(tallerActualizado.getNombre());
-            taller.setDescripcion(tallerActualizado.getDescripcion());
-            taller.setDuracion(tallerActualizado.getDuracion());
-            taller.setPrecio(tallerActualizado.getPrecio());
-            taller.setImagen(tallerActualizado.getImagen());
-            return ResponseEntity.ok(tallerService.registrar(taller));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Taller> actualizarTaller(@PathVariable Long id, @RequestBody TallerDTO tallerDTO) {
+        Optional<Taller> tallerOpt = tallerService.actualizar(id, tallerDTO);
+        return tallerOpt.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE /api/talleres/{id}

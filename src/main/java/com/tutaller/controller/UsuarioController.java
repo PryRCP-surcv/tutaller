@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.tutaller.dto.UsuarioDTO;
 import com.tutaller.model.Usuario;
 import com.tutaller.service.UsuarioService;
 
@@ -30,23 +31,24 @@ public class UsuarioController {
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
         Optional<Usuario> usuarioOpt = usuarioService.obtenerPorId(id);
         return usuarioOpt.map(ResponseEntity::ok)
-                         .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // POST /api/usuarios
     // Crea un nuevo usuario (registro)
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioService.guardar(usuario));
+    public ResponseEntity<Usuario> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) { // Usar DTO
+        return ResponseEntity.ok(usuarioService.guardar(usuarioDTO));
     }
 
     // PUT /api/usuarios/{id}
     // Actualiza un usuario existente
-    @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
-        Optional<Usuario> usuarioOpt = usuarioService.actualizar(id, usuarioActualizado);
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) { // Usar
+                                                                                                                  // //
+                                                                                                                  // DTO
+        Optional<Usuario> usuarioOpt = usuarioService.actualizar(id, usuarioDTO);
         return usuarioOpt.map(ResponseEntity::ok)
-                         .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE /api/usuarios/{id}

@@ -3,16 +3,19 @@ package com.tutaller.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.tutaller.dto.InscripcionDTO;
 import com.tutaller.model.Inscripcion;
 
 public interface InscripcionService {
-    Inscripcion guardar(Inscripcion inscripcion); // POST
+    Inscripcion guardar(InscripcionDTO inscripcionDTO); // POST
 
-    List<Inscripcion> listarTodas(); // GET
+    // GET
+    List<Inscripcion> listarTodas();
 
-    Optional<Inscripcion> obtenerPorId(Long id); // GET por id
+    // GET por id
+    Optional<Inscripcion> obtenerPorId(Long id);
 
-    Optional<Inscripcion> actualizar(Long id, Inscripcion inscripcionActualizada); // PUT
+    Optional<Inscripcion> actualizar(Long id, InscripcionDTO inscripcionDTO); // PUT
 
-    boolean eliminar(Long id); // DELETE
+    boolean eliminar(Long id);
 }

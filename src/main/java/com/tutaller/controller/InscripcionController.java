@@ -1,5 +1,6 @@
 package com.tutaller.controller;
 
+import com.tutaller.dto.InscripcionDTO;
 import com.tutaller.model.Inscripcion;
 import com.tutaller.service.InscripcionService;
 
@@ -30,23 +31,24 @@ public class InscripcionController {
     public ResponseEntity<Inscripcion> obtenerInscripcion(@PathVariable Long id) {
         Optional<Inscripcion> inscripcionOpt = inscripcionService.obtenerPorId(id);
         return inscripcionOpt.map(ResponseEntity::ok)
-                             .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // POST /api/inscripciones
     // Registra una nueva inscripción de un usuario a un taller
     @PostMapping
-    public ResponseEntity<Inscripcion> crearInscripcion(@RequestBody Inscripcion inscripcion) {
-        return ResponseEntity.ok(inscripcionService.guardar(inscripcion));
+    public ResponseEntity<Inscripcion> crearInscripcion(@RequestBody InscripcionDTO inscripcionDTO) { // Usar DTO
+        return ResponseEntity.ok(inscripcionService.guardar(inscripcionDTO));
     }
 
     // PUT /api/inscripciones/{id}
     // Actualiza la inscripción existente (ej. cambiar estado o taller)
     @PutMapping("/{id}")
-    public ResponseEntity<Inscripcion> actualizarInscripcion(@PathVariable Long id, @RequestBody Inscripcion actualizada) {
-        Optional<Inscripcion> inscripcionOpt = inscripcionService.actualizar(id, actualizada);
+    public ResponseEntity<Inscripcion> actualizarInscripcion(@PathVariable Long id,
+            @RequestBody InscripcionDTO inscripcionDTO) { // Usar DTO
+        Optional<Inscripcion> inscripcionOpt = inscripcionService.actualizar(id, inscripcionDTO);
         return inscripcionOpt.map(ResponseEntity::ok)
-                             .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE /api/inscripciones/{id}
